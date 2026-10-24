@@ -9,6 +9,25 @@ const WEIGHTS = ["250 g", "500 g"];
 const ROASTS = ["Açık", "Orta Açık", "Orta", "Orta Koyu", "Koyu"];
 const GRIND_ICONS = [Bean, Coffee, FlaskConical, Filter, Filter, FlaskConical, Snowflake];
 
+const recommendationDescriptions: Record<string, string> = {
+  "Colombia Supremo": "Kolombiya’nın Huila bölgesinden gelen bu %100 Arabica kahvesi, karamel ve sütlü çikolata notalarıyla dengeli bir içim sunar. Orta gövdesi ve hafif meyvemsi karakteriyle filtre kahve ve espresso için ideal bir seçimdir.",
+  "Ethiopian Sidamo": "Etiyopya’nın Sidamo bölgesinden gelen bu Arabica kahvesi, çiçeksi aromaları, narenciye notaları ve canlı asiditesiyle öne çıkar. Hafif-orta gövdesi sayesinde özellikle V60, Chemex ve diğer filtre demleme yöntemlerinde zarif bir fincan deneyimi sunar.",
+  "Guatemala Antigua": "Guatemala’nın volkanik topraklarında yetişen Arabica çekirdeklerinden hazırlanan bu kahve, kakao, hafif baharat ve narenciye dokunuşlarıyla dengeli bir karaktere sahiptir. Temiz içimi ve orta gövdesiyle filtre kahveden espressoya kadar farklı demleme yöntemlerine uyum sağlar.",
+  "Jamaica Blue Mountain": "Jamaika’nın yüksek rakımlı Blue Mountain bölgesinden gelen bu seçkin Arabica kahvesi, çiçeksi aromaları, narenciye canlılığı ve tatlı çikolata dokunuşlarıyla rafine bir içim sunar. Yumuşak karakteri ve dengeli asiditesiyle özellikle nitelikli filtre kahve deneyimini sevenler için özel bir seçenektir.",
+  "Kenya AA": "Kenya’nın seçkin kahve bölgelerinden gelen bu Arabica kahvesi, kırmızı meyve notaları, şekerli tatlılığı ve canlı asiditesiyle dikkat çeker. Orta gövdesi ve belirgin aromatik yapısıyla V60, Chemex ve espresso demlemelerinde karakterli bir fincan sunar.",
+  "Nicaragua Gold": "Nicaragua Gold, mevcut ürün listesindeki aromatik profil bilgilerine göre yasemin, narenciye, karamel ve fındık notalarıyla tanımlanmaktadır. Bu aromatik karakter, filtre kahve ve espresso gibi farklı demleme yöntemleri için değerlendirilebilir.",
+  "Peru Papagayo Grade 1": "Peru’nun Papagayo bölgesinden gelen bu seçkin Arabica kahvesi, tatlılık, meyvemsi notalar, fındık ve vanilya dokunuşlarını bir araya getirir. Orta asiditesi ve zengin gövdesiyle dengeli bir içim sunarken Grade 1 kalite sınıfıyla öne çıkar.",
+  "Sumatra Blue Batak": "Endonezya’nın Batak bölgesinden gelen %100 Arabica kahvesi, çikolata ve toprak notalarıyla yoğun ve karakterli bir içim sunar. Belirgin asiditesi ve güçlü gövdesiyle hem filtre kahve hem de espresso sevenler için farklı bir alternatif oluşturur.",
+  "Uganda Bigusi": "Uganda’nın Bigusi bölgesinde yetişen Arabica çekirdeklerinden hazırlanan bu kahve, kakao ve bitter çikolata notalarını hafif narenciye dokunuşlarıyla buluşturur. Dengeli gövdesi, temiz bitişi ve orta kavrum profiliyle zengin ama rahat içimli bir kahve deneyimi sunar.",
+  "Costa Rica Tarrazú": "Kosta Rika’nın Tarrazú bölgesinden gelen bu Arabica kahvesi, karamel, kahverengi şeker, sütlü çikolata ve narenciye notalarıyla dengeli bir içim sunar. Orta gövdesi ve parlak, tatlı asiditesiyle filtre kahve ve espresso için ideal bir seçimdir.",
+  "Peru Ecoforest": "Kuzey Peru’nun Cajamarca bölgesindeki küçük üreticiler tarafından yetiştirilen bu Arabica kahvesi, yıkanmış işleme yöntemiyle hazırlanır. Sütlü çikolata, fındık, elma ve narenciye notaları; kremamsı gövdesi ve dengeli asiditesiyle uyumlu bir fincan oluşturur.",
+  "Moka Pot Blend": "Moka pot demlemeye özel hazırlanan bu harman, Colombia Supremo, Guatemala Antigua ve Kenya AA çekirdeklerini bir araya getirir. Bitter kakao, karamel ve kavrulmuş fındık notaları; yoğun gövdesi ve kadifemsi karakteriyle espresso benzeri güçlü bir kahve deneyimi sunar.",
+  "Special Espresso Blend": "Guatemala, Kolombiya ve Kosta Rika çekirdeklerinin birleşiminden oluşan bu %100 Arabica harmanı, çikolata, karamel ve hafif fındık notalarıyla öne çıkar. Dengeli gövdesi ve pürüzsüz içimiyle espresso bazlı içecekler için keyifli bir tercihtir.",
+  "Special Filter Blend": "Özenle seçilmiş kahve çekirdeklerinden hazırlanan bu harman, kırmızı meyve, çikolata ve karamel notalarını dengeli bir profilde buluşturur. Yumuşak içimi ve orta gövdesiyle filtre kahve makineleri, V60, Chemex ve French Press için uygundur.",
+  "Decaf Kafeinsiz Türk Kahvesi": "Türk kahvesine özel ince öğütümle hazırlanan bu kafeinsiz seçenek, geleneksel cezve kahvesi keyfini sürdürmek isteyenler için tasarlanmıştır. Swiss Water Process yöntemiyle kafeini azaltılan kahve, köpüklü ve aromatik bir Türk kahvesi deneyimi sunmayı amaçlar.",
+  "Peru Organic Decaf": "Peru Organic Decaf, ürün listesindeki tadım notalarına göre kakao, hafif karamel ve kuruyemiş aromalarıyla tanımlanmaktadır. Düşük asidite ve temiz bitiş özellikleriyle yumuşak karakterli bir kahve seçeneği olarak sunulabilir.",
+};
+
 export default function ProductDetail({ product, onBack, onProductClick }: { product: Product; onBack: () => void; onProductClick?: (product: Product) => void }) {
   const { addToCart } = useStore();
   const [weight, setWeight] = useState(WEIGHTS[0]);
@@ -57,7 +76,7 @@ export default function ProductDetail({ product, onBack, onProductClick }: { pro
         </div>
         <section className="product-recommendations" aria-labelledby="recommended-products-title">
           <div className="product-info-heading"><span className="eyebrow">Size özel seçtik</span><h2 id="recommended-products-title">Tavsiye ürünler</h2></div>
-          <div className="recommended-grid">{products.filter((item) => item.id !== product.id).slice(0, 3).map((item) => { const catalog = coffeeProducts.find((entry) => entry.name.toLowerCase() === item.title.toLowerCase()); return <button type="button" className="recommended-card" key={item.id} onClick={() => onProductClick?.(item)}><div className="recommended-card-media"><img src={catalog?.image || item.image || ''} alt={item.title} /></div><div className="recommended-card-copy"><span>{catalog?.origin || item.origin}</span><h3>{item.title}</h3><p>{catalog?.description || item.flavorNotes || item.description || 'Kahveniz için özenle seçilmiş özel ürün.'}</p><small>Kampanya alanı</small></div></button>; })}</div>
+          <div className="recommended-grid">{products.filter((item) => item.id !== product.id).slice(0, 3).map((item) => { const catalog = coffeeProducts.find((entry) => entry.name.toLowerCase() === item.title.toLowerCase()); return <button type="button" className="recommended-card" key={item.id} onClick={() => onProductClick?.(item)}><div className="recommended-card-media"><img src={catalog?.image || item.image || ''} alt={item.title} /></div><div className="recommended-card-copy"><span>{catalog?.origin || item.origin}</span><h3>{item.title}</h3><p>{recommendationDescriptions[item.title] || catalog?.description || item.flavorNotes || item.description || 'Kahveniz için özenle seçilmiş özel ürün.'}</p><small>Kampanya alanı</small></div></button>; })}</div>
         </section>
       </div>
     </main>
