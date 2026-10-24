@@ -10,6 +10,7 @@ interface HeaderProps {
   onNavigateBrewing?: () => void;
   onNavigateAbout?: () => void;
   onNavigateCart?: () => void;
+  onNavigateAccount?: () => void;
 }
 
 const megaMenuData = [
@@ -39,7 +40,7 @@ const megaMenuData = [
   },
 ];
 
-const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateSocial, onNavigateBrewing, onNavigateAbout, onNavigateCart }: HeaderProps) => {
+const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateSocial, onNavigateBrewing, onNavigateAbout, onNavigateCart, onNavigateAccount }: HeaderProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -183,7 +184,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
 
             <div className="relative hidden md:block">
               <button
-                onClick={() => { setAccountOpen(!accountOpen); setSearchOpen(false); setCartOpen(false); }}
+                onClick={() => { if (onNavigateAccount) { onNavigateAccount(); setAccountOpen(false); } else setAccountOpen(!accountOpen); setSearchOpen(false); setCartOpen(false); }}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 hover:scale-110"
                 style={{ color: iconColor }}
                 onMouseEnter={e => { e.currentTarget.style.color = accentColor; }}
@@ -206,14 +207,15 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
                   <div className="h-px mb-4" style={{ background: 'linear-gradient(90deg, var(--accent), transparent)' }} />
                   <div className="space-y-1">
                     {[
-                      { icon: Package, label: 'Siparişlerim', href: 'https://www.forcoffeetr.com/magaza/hesabim/siparisler/' },
-                      { icon: Heart, label: 'Favorilerim', href: 'https://www.forcoffeetr.com/magaza/hesabim/favoriler/' },
-                      { icon: MapPin, label: 'Adreslerim', href: 'https://www.forcoffeetr.com/magaza/hesabim/adresler/' },
-                      { icon: Settings, label: 'Hesap Ayarları', href: 'https://www.forcoffeetr.com/magaza/hesabim/ayarlar/' },
-                    ].map(({ icon: Icon, label, href }) => (
+                      { icon: Package, label: 'Siparişlerim' },
+                      { icon: Heart, label: 'Favorilerim' },
+                      { icon: MapPin, label: 'Adreslerim' },
+                      { icon: Settings, label: 'Hesap Ayarları' },
+                    ].map(({ icon: Icon, label }) => (
                       <a
                         key={label}
-                        href={href}
+                        href="/hesabim"
+                        onClick={(event) => { event.preventDefault(); onNavigateAccount?.(); setAccountOpen(false); }}
                         className="flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200"
                         style={{ color: 'var(--text-secondary)', borderRadius: '12px' }}
                         onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.backgroundColor = 'rgba(143,169,139,0.06)'; }}
@@ -240,7 +242,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
             </div>
 
             <a
-              href="https://www.forcoffeetr.com/magaza/hesabim/favoriler/"
+href="/hesabim" onClick={(event) => { event.preventDefault(); onNavigateAccount?.(); }}
               className="relative hidden md:flex w-9 h-9 items-center justify-center transition-all duration-300 hover:scale-110"
               style={{ color: iconColor }}
               onMouseEnter={e => { e.currentTarget.style.color = accentColor; }}

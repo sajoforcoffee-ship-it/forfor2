@@ -16,13 +16,14 @@ import ContactPage from './components/ContactPage';
 import SocialFeedPage from './components/SocialFeedPage';
 import BrewingPage from './components/BrewingPage';
 import CartPage from './components/CartPage';
+import AccountPage from './components/AccountPage';
 import coffeeProducts from './data/coffee-products.json';
 
-type Page = 'home' | 'shop' | 'contact' | 'social' | 'brewing' | 'cart';
+type Page = 'home' | 'shop' | 'contact' | 'social' | 'brewing' | 'cart' | 'account';
 
 function AppContent() {
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState<Page>(() => window.location.pathname === '/sepet' ? 'cart' : 'home');
+  const [page, setPage] = useState<Page>(() => window.location.pathname === '/sepet' ? 'cart' : window.location.pathname === '/hesabim' ? 'account' : 'home');
   const [siteVisible, setSiteVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -38,7 +39,7 @@ function AppContent() {
   }, [page]);
 
   useEffect(() => {
-    const handlePopState = () => setPage(window.location.pathname === '/sepet' ? 'cart' : 'home');
+    const handlePopState = () => setPage(window.location.pathname === '/sepet' ? 'cart' : window.location.pathname === '/hesabim' ? 'account' : 'home');
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -51,6 +52,7 @@ function AppContent() {
   const goSocial = () => setPage('social');
   const goBrewing = () => setPage('brewing');
   const goCart = () => { window.history.pushState({}, '', '/sepet'); setPage('cart'); };
+  const goAccount = () => { window.history.pushState({}, '', '/hesabim'); setPage('account'); };
 
   const handleCatalogProduct = (product: Product) => {
     const catalogProduct = coffeeProducts.find((item) => item.name.toLowerCase() === product.title.toLowerCase());
@@ -101,12 +103,14 @@ function AppContent() {
     onNavigateBrewing: goBrewing,
     onNavigateAbout: goContact,
     onNavigateCart: goCart,
+    onNavigateAccount: goAccount,
   };
 
   if (page === 'contact') return <ContactPage {...navProps} />;
   if (page === 'social') return <SocialFeedPage {...navProps} />;
   if (page === 'brewing') return <BrewingPage />;
   if (page === 'cart') return <><Header {...navProps} /><CartPage onShop={goShop} /><Footer /></>;
+  if (page === 'account') return <><Header {...navProps} /><AccountPage onBack={goShop} /><Footer /></>;
   if (selectedProduct) return <><Header {...navProps} /><ProductDetail product={selectedProduct} onBack={() => { setSelectedProduct(null); setPage('shop'); }} onProductClick={handleCatalogProduct} /><Footer /></>;
 
   return (
