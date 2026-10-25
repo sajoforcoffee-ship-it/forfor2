@@ -4,8 +4,8 @@ import {
   RefreshCw, ShoppingBag, Heart, ArrowRight, ArrowLeft,
 } from 'lucide-react';
 import {
-  woocommerceAPI, Product, Category, SortOption,
-} from '../services/woocommerce';
+  catalogAPI, Product, Category, SortOption,
+} from '../services/catalog';
 import { useStore } from '../context/useStore';
 import StoreProductCard from './StoreProductCard';
 
@@ -114,8 +114,8 @@ export default function StorePage({ onProductInspect }: StorePageProps) {
     setLoading(true);
     setError(false);
     try {
-      const sortParams = woocommerceAPI.buildSortParams(sort);
-      const { products: data, total: t, totalPages: tp } = await woocommerceAPI.getProducts({
+      const sortParams = catalogAPI.buildSortParams(sort);
+      const { products: data, total: t, totalPages: tp } = await catalogAPI.getProducts({
         per_page: 12,
         page,
         search: search || undefined,
@@ -138,7 +138,7 @@ export default function StorePage({ onProductInspect }: StorePageProps) {
   useEffect(() => {
     const fetchCats = async () => {
       try {
-        const cats = await woocommerceAPI.getCategories();
+        const cats = await catalogAPI.getCategories();
         setCategories(cats);
       } catch { /* categories are optional */ }
     };

@@ -73,7 +73,7 @@ function AppContent() {
     });
   };
 
-  const handleProductInspect = (product: import('./services/woocommerce').Product) => {
+  const handleProductInspect = (product: import('./services/catalog').Product) => {
     const catalogProduct = coffeeProducts.find((item) => item.name.toLowerCase() === product.name.toLowerCase());
     setSelectedProduct({
       id: product.id,
