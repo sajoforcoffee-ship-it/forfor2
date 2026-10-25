@@ -1,6 +1,6 @@
 
 import { Heart, ArrowRight, ShoppingBag } from 'lucide-react';
-import { Product } from '../services/woocommerce';
+import { Product } from '../services/catalog';
 import { useStore } from '../context/useStore';
 import coffeeProducts from '../data/coffee-products.json';
 
