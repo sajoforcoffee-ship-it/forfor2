@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { LockKeyhole, LogOut, MapPin, Package, UserRound } from 'lucide-react';
 import { supabase } from '../services/supabase';
 
-interface AccountPageProps { onBack: () => void; }
+interface AccountPageProps { onBack: () => void; initialMode?: 'login' | 'signup'; }
 type Tab = 'account' | 'addresses' | 'orders';
 
 function authMessage(message: string) {
@@ -13,12 +13,12 @@ function authMessage(message: string) {
   return 'İşlem sırasında beklenmeyen bir hata oluştu.';
 }
 
-export default function AccountPage({ onBack }: AccountPageProps) {
+export default function AccountPage({ onBack, initialMode = 'login' }: AccountPageProps) {
   const [tab, setTab] = useState<Tab>('account');
   const [user, setUser] = useState<Awaited<ReturnType<NonNullable<typeof supabase>['auth']['getUser']>>['data']['user']>(null);
   const [profile, setProfile] = useState({ first_name: '', last_name: '', phone: '' });
   const [addresses, setAddresses] = useState<Array<{ id: string; label: string; city: string; address_1: string; postcode: string; is_default_shipping: boolean }>>([]);
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
   const [form, setForm] = useState({ email: '', password: '', first_name: '', last_name: '' });
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(true);
