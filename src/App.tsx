@@ -52,7 +52,11 @@ function AppContent() {
   const goSocial = () => setPage('social');
   const goBrewing = () => setPage('brewing');
   const goCart = () => { window.history.pushState({}, '', '/sepet'); setPage('cart'); };
-  const goAccount = () => { window.history.pushState({}, '', '/hesabim'); setPage('account'); };
+  const goAccount = (mode?: 'login' | 'signup') => {
+    const path = mode ? `/hesabim?mod=${mode}` : '/hesabim';
+    window.history.pushState({}, '', path);
+    setPage('account');
+  };
 
   const handleCatalogProduct = (product: Product) => {
     const catalogProduct = coffeeProducts.find((item) => item.name.toLowerCase() === product.title.toLowerCase());
@@ -110,7 +114,7 @@ function AppContent() {
   if (page === 'social') return <SocialFeedPage {...navProps} />;
   if (page === 'brewing') return <BrewingPage />;
   if (page === 'cart') return <><Header {...navProps} /><CartPage onShop={goShop} /><Footer /></>;
-  if (page === 'account') return <><Header {...navProps} /><AccountPage onBack={goShop} /><Footer /></>;
+  if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={new URLSearchParams(window.location.search).get('mod') === 'signup' ? 'signup' : 'login'} onBack={goShop} /><Footer /></>;
   if (selectedProduct) return <><Header {...navProps} /><ProductDetail product={selectedProduct} onBack={() => { setSelectedProduct(null); setPage('shop'); }} onProductClick={handleCatalogProduct} /><Footer /></>;
 
   return (

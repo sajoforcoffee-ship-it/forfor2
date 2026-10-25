@@ -10,7 +10,7 @@ interface HeaderProps {
   onNavigateBrewing?: () => void;
   onNavigateAbout?: () => void;
   onNavigateCart?: () => void;
-  onNavigateAccount?: () => void;
+  onNavigateAccount?: (mode?: 'login' | 'signup') => void;
 }
 
 const megaMenuData = [
@@ -207,15 +207,17 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
                   <div className="h-px mb-4" style={{ background: 'linear-gradient(90deg, var(--accent), transparent)' }} />
                   <div className="space-y-1">
                     {[
+                      { icon: User, label: 'Giriş yap', mode: 'login' as const },
+                      { icon: User, label: 'Üye ol', mode: 'signup' as const },
                       { icon: Package, label: 'Siparişlerim' },
                       { icon: Heart, label: 'Favorilerim' },
                       { icon: MapPin, label: 'Adreslerim' },
                       { icon: Settings, label: 'Hesap Ayarları' },
-                    ].map(({ icon: Icon, label }) => (
+                    ].map(({ icon: Icon, label, mode }) => (
                       <a
                         key={label}
                         href="/hesabim"
-                        onClick={(event) => { event.preventDefault(); onNavigateAccount?.(); setAccountOpen(false); }}
+                        onClick={(event) => { event.preventDefault(); onNavigateAccount?.(mode); setAccountOpen(false); }}
                         className="flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200"
                         style={{ color: 'var(--text-secondary)', borderRadius: '12px' }}
                         onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.backgroundColor = 'rgba(143,169,139,0.06)'; }}
@@ -609,15 +611,18 @@ Sepete git
               </div>
             </nav>
             <div className="mt-8 space-y-3">
-              <a href="https://www.forcoffeetr.com/magaza/hesabim/" className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <User size={16} strokeWidth={1.5} /> Hesabım
-              </a>
-              <a href="https://www.forcoffeetr.com/magaza/hesabim/favoriler/" className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <Heart size={16} strokeWidth={1.5} /> Favoriler
-              </a>
-              <a href="https://www.forcoffeetr.com/magaza/sepet/" className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+              <button type="button" onClick={() => { onNavigateAccount?.('login'); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <User size={16} strokeWidth={1.5} /> Giriş yap
+              </button>
+              <button type="button" onClick={() => { onNavigateAccount?.('signup'); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <User size={16} strokeWidth={1.5} /> Üye ol
+              </button>
+              <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <Heart size={16} strokeWidth={1.5} /> Favorilerim
+              </button>
+              <button type="button" onClick={() => { onNavigateCart?.(); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
                 <ShoppingBag size={16} strokeWidth={1.5} /> Sepet
-              </a>
+              </button>
             </div>
           </div>
         </div>
