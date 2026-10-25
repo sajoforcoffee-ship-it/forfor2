@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Menu, X, ShoppingBag, User, Heart, Search, ChevronDown, ChevronUp, ArrowRight, Package, MapPin, Settings, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, User, Heart, Search, ChevronDown, ArrowRight, Package, MapPin, Settings, LogOut } from 'lucide-react';
 import { useStore } from '../context/useStore';
+import { supabase } from '../services/supabase';
 
 interface HeaderProps {
   onNavigateHome?: () => void;
@@ -44,15 +45,30 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
-  const [mobileShopExpanded, setMobileShopExpanded] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const theme = 'dark';
   const { cartCount, cart, cartTotal, removeFromCart, updateQuantity, favorites } = useStore();
+  const [user, setUser] = useState<{ email?: string | null; user_metadata?: { first_name?: string; last_name?: string } } | null>(null);
   const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
+
+  useEffect(() => {
+    if (!supabase) return;
+    let active = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (active) setUser(data.user);
+    });
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setUser(session?.user ?? null);
+    });
+    return () => {
+      active = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -534,8 +550,8 @@ Sepete git
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="absolute right-0 top-0 bottom-0 w-full max-w-sm h-full overflow-y-auto p-8"
-            style={{ backgroundColor: 'var(--surface)' }}
+            className="absolute right-0 top-0 bottom-0 h-full w-[88vw] max-w-sm overflow-y-auto p-6 sm:p-8"
+            style={{ backgroundColor: 'var(--surface)', borderLeft: '1px solid var(--border)' }}
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-8">
@@ -562,67 +578,55 @@ Sepete git
                 </button>
               ))}
 
-              {/* Mağaza — tappable label navigates to Shop, chevron toggles sub-categories */}
-              <div style={{ borderBottom: '1px solid var(--border)' }}>
-                <div className="flex w-full items-center justify-between py-4">
-                  <button
-                    onClick={() => { onNavigateShop?.(); setMobileOpen(false); }}
-                    className="font-serif text-xl transition-colors duration-300"
-                    style={{ color: 'var(--text-primary)' }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-primary)'}
-                  >
-                    Mağaza
+              <button
+                onClick={() => { onNavigateShop?.(); setMobileOpen(false); }}
+                className="block w-full text-left py-4 font-serif text-xl transition-colors duration-300"
+                style={{ color: 'var(--text-primary)', borderBottom: '1px solid var(--border)' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--text-primary)'}
+              >
+                Mağaza
+              </button>
+            </nav>
+            <div className="mt-8 border-t border-[var(--border)] pt-5">
+              {user ? (
+                <>
+                  <div className="mb-3 flex items-center gap-3 rounded-xl px-2 py-2">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)]" style={{ color: 'var(--accent)' }}>
+                      <User size={18} strokeWidth={1.5} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        {user.user_metadata?.first_name || user.email || 'Hesabım'}
+                      </p>
+                      <p className="truncate text-xs" style={{ color: 'var(--text-muted)' }}>{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                      <User size={16} strokeWidth={1.5} /> Hesabım
+                    </button>
+                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                      <Heart size={16} strokeWidth={1.5} /> Favorilerim
+                    </button>
+                    <button type="button" onClick={() => { onNavigateCart?.(); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                      <ShoppingBag size={16} strokeWidth={1.5} /> Sepet{cartCount > 0 ? ` (${cartCount})` : ''}
+                    </button>
+                    <button type="button" onClick={async () => { await supabase?.auth.signOut(); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                      <LogOut size={16} strokeWidth={1.5} /> Çıkış yap
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-1">
+                  <button type="button" onClick={() => { onNavigateAccount?.('login'); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <User size={16} strokeWidth={1.5} /> Giriş yap
                   </button>
-                  <button
-                    onClick={() => setMobileShopExpanded(v => !v)}
-                    className="flex items-center justify-center w-8 h-8"
-                    style={{ color: mobileShopExpanded ? 'var(--accent)' : 'var(--text-primary)' }}
-                  >
-                    {mobileShopExpanded
-                      ? <ChevronUp size={20} strokeWidth={1.5} style={{ color: 'var(--accent)' }} />
-                      : <ChevronDown size={20} strokeWidth={1.5} />}
+                  <button type="button" onClick={() => { onNavigateAccount?.('signup'); setMobileOpen(false); }} className="flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <User size={16} strokeWidth={1.5} /> Üye ol
                   </button>
                 </div>
-                {mobileShopExpanded && (
-                  <div className="pb-4 space-y-3">
-                    {megaMenuData.map(cat => (
-                      <a
-                        key={cat.title}
-                        href={cat.href}
-                        className="flex gap-3 items-center p-3 transition-all duration-200"
-                        style={{
-                          borderRadius: '16px',
-                          backgroundColor: 'var(--bg-secondary)',
-                          border: '1px solid var(--border)',
-                        }}
-                      >
-                        <div className="flex-shrink-0 overflow-hidden" style={{ width: '64px', height: '48px', borderRadius: '10px' }}>
-                          <img src={cat.image} alt={cat.title} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{cat.title}</p>
-                          <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>İncele →</p>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </nav>
-            <div className="mt-8 space-y-3">
-              <button type="button" onClick={() => { onNavigateAccount?.('login'); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <User size={16} strokeWidth={1.5} /> Giriş yap
-              </button>
-              <button type="button" onClick={() => { onNavigateAccount?.('signup'); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <User size={16} strokeWidth={1.5} /> Üye ol
-              </button>
-              <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <Heart size={16} strokeWidth={1.5} /> Favorilerim
-              </button>
-              <button type="button" onClick={() => { onNavigateCart?.(); setMobileOpen(false); }} className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <ShoppingBag size={16} strokeWidth={1.5} /> Sepet
-              </button>
+              )}
             </div>
           </div>
         </div>
