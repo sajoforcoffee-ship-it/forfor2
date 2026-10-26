@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { StoreProvider } from './context/StoreContext';
 import LoadingScreen from './components/LoadingScreen';
@@ -146,6 +147,7 @@ export default function App() {
     <ThemeProvider>
       <StoreProvider>
         <AppContent />
+        <Analytics />
       </StoreProvider>
     </ThemeProvider>
   );
