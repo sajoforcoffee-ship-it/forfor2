@@ -232,6 +232,16 @@
   .address-badge { display: inline-block; margin-left: 10px; color: #d7a85c; font-size: 13px; }
   @media (max-width: 640px) { .account-page { padding: 78px 16px 60px; } .account-heading { align-items: start; flex-direction: column; } .account-heading h1, .auth-card h1 { font-size: 42px; } .account-form-grid, .address-list { grid-template-columns: 1fr; } .account-tabs { display: grid; grid-template-columns: repeat(3, 1fr); } .account-tabs button { justify-content: center; padding-inline: 8px; font-size: 13px; } }
 
+  .mobile-drawer-header { display: flex; align-items: center; justify-content: space-between; min-height: 72px; margin: -8px -4px 28px; padding: 0 0 20px; border-bottom: 1px solid rgba(244,244,240,.09); }
+  .mobile-drawer-logo { display: block; width: min(240px, 72vw); height: auto; max-height: 64px; object-fit: contain; object-position: left center; }
+  .mobile-drawer-close { display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 44px; color: #f4f4f0; border: 1px solid rgba(244,244,240,.14); border-radius: 999px; background: transparent; cursor: pointer; transition: color .2s ease, border-color .2s ease, background-color .2s ease; }
+  .mobile-drawer-close:hover, .mobile-drawer-close:focus-visible { color: #d7a85c; border-color: rgba(215,168,92,.65); background: rgba(215,168,92,.08); outline: none; }
+  .mobile-primary-nav { display: grid; gap: 0; }
+  .mobile-primary-link { display: flex; align-items: center; width: 100%; min-height: 54px; padding: 10px 2px; border-bottom: 1px solid rgba(244,244,240,.08); text-align: left; font-size: 19px; line-height: 1.2; letter-spacing: .01em; }
+  .mobile-account-link { color: rgba(244,244,240,.76) !important; transition: color .2s ease, background-color .2s ease; }
+  .mobile-account-link svg { color: #d7a85c; flex: 0 0 auto; }
+  .mobile-account-link:hover, .mobile-account-link:focus-visible { color: #f4f4f0 !important; background: rgba(215,168,92,.07); outline: none; }
+  .mobile-account-link:hover svg, .mobile-account-link:focus-visible svg { color: #f0c66c; }
   .profile-list { display: flex; flex-direction: column; gap: 15px; color: rgba(248,243,232,.7); }
   .profile-list span { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(248,243,232,.1); padding-bottom: 10px; }
   .profile-list b { color: #d7a85c; font-weight: 500; }
