@@ -546,6 +546,7 @@ Sepete git
       {mobileOpen && (
         <div
           className="fixed inset-0 z-[60] lg:hidden"
+          data-mobile-menu-version="premium-v2"
           style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)' }}
           onClick={() => setMobileOpen(false)}
         >
