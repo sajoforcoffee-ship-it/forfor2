@@ -232,7 +232,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
                     ].map(({ icon: Icon, label, mode }) => (
                       <a
                         key={label}
-                        href="/hesabim"
+                        href={mode === 'signup' ? '/uye-ol' : '/giris'}
                         onClick={(event) => { event.preventDefault(); onNavigateAccount?.(mode); setAccountOpen(false); }}
                         className="flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200"
                         style={{ color: 'var(--text-secondary)', borderRadius: '12px' }}
