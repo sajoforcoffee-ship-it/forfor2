@@ -23,7 +23,7 @@ type Page = 'home' | 'shop' | 'contact' | 'social' | 'brewing' | 'cart' | 'accou
 
 function AppContent() {
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState<Page>(() => window.location.pathname === '/sepet' ? 'cart' : window.location.pathname === '/hesabim' ? 'account' : 'home');
+  const [page, setPage] = useState<Page>(() => window.location.pathname === '/sepet' ? 'cart' : ['/hesabim', '/giris', '/uye-ol'].includes(window.location.pathname) ? 'account' : 'home');
   const [siteVisible, setSiteVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -39,7 +39,7 @@ function AppContent() {
   }, [page]);
 
   useEffect(() => {
-    const handlePopState = () => setPage(window.location.pathname === '/sepet' ? 'cart' : window.location.pathname === '/hesabim' ? 'account' : 'home');
+    const handlePopState = () => setPage(window.location.pathname === '/sepet' ? 'cart' : ['/hesabim', '/giris', '/uye-ol'].includes(window.location.pathname) ? 'account' : 'home');
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -53,7 +53,7 @@ function AppContent() {
   const goBrewing = () => setPage('brewing');
   const goCart = () => { window.history.pushState({}, '', '/sepet'); setPage('cart'); };
   const goAccount = (mode?: 'login' | 'signup') => {
-    const path = mode ? `/hesabim?mod=${mode}` : '/hesabim';
+    const path = mode === 'signup' ? '/uye-ol' : mode === 'login' ? '/giris' : '/hesabim';
     window.history.pushState({}, '', path);
     setPage('account');
   };
@@ -114,7 +114,7 @@ function AppContent() {
   if (page === 'social') return <SocialFeedPage {...navProps} />;
   if (page === 'brewing') return <BrewingPage />;
   if (page === 'cart') return <><Header {...navProps} /><CartPage onShop={goShop} /><Footer /></>;
-  if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={new URLSearchParams(window.location.search).get('mod') === 'signup' ? 'signup' : 'login'} onBack={goShop} /><Footer /></>;
+  if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={window.location.pathname === '/uye-ol' ? 'signup' : 'login'} onBack={goShop} /><Footer /></>;
   if (selectedProduct) return <><Header {...navProps} /><ProductDetail product={selectedProduct} onBack={() => { setSelectedProduct(null); setPage('shop'); }} onProductClick={handleCatalogProduct} /><Footer /></>;
 
   return (
