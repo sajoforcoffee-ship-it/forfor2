@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { StoreProvider } from './context/StoreContext';
-import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HeroSection from './components/HeroSection';
@@ -21,37 +20,40 @@ import coffeeProducts from './data/coffee-products.json';
 
 type Page = 'home' | 'shop' | 'contact' | 'social' | 'brewing' | 'cart' | 'account';
 
-function AppContent() {
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState<Page>(() => window.location.pathname === '/sepet' ? 'cart' : ['/hesabim', '/giris', '/uye-ol', '/sifremi-unuttum'].includes(window.location.pathname) ? 'account' : 'home');
-  const [siteVisible, setSiteVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+function pageFromPath(pathname: string): Page {
+  if (pathname === '/magaza') return 'shop';
+  if (pathname === '/sepet') return 'cart';
+  if (['/hesabim', '/giris', '/uye-ol', '/sifremi-unuttum', '/sifre-sifirla'].includes(pathname)) return 'account';
+  if (pathname === '/iletisim' || pathname === '/hakkimizda') return 'contact';
+  if (pathname === '/sosyal') return 'social';
+  if (pathname === '/kahve-akademisi' || pathname === '/demleme') return 'brewing';
+  return 'home';
+}
 
-  useEffect(() => {
-    if (!loading) {
-      const t = setTimeout(() => setSiteVisible(true), 50);
-      return () => clearTimeout(t);
-    }
-  }, [loading]);
+function AppContent() {
+  const [page, setPage] = useState<Page>(() => pageFromPath(window.location.pathname));
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page]);
 
   useEffect(() => {
-    const handlePopState = () => setPage(window.location.pathname === '/sepet' ? 'cart' : ['/hesabim', '/giris', '/uye-ol', '/sifremi-unuttum'].includes(window.location.pathname) ? 'account' : 'home');
+    const handlePopState = () => setPage(pageFromPath(window.location.pathname));
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  if (loading) return <LoadingScreen onComplete={() => setLoading(false)} />;
-
-  const goHome = () => { window.history.pushState({}, '', '/'); setPage('home'); };
-  const goShop = () => { window.history.pushState({}, '', '/magaza'); setPage('shop'); };
-  const goContact = () => setPage('contact');
-  const goSocial = () => setPage('social');
-  const goBrewing = () => setPage('brewing');
-  const goCart = () => { window.history.pushState({}, '', '/sepet'); setPage('cart'); };
+  const navigate = (path: string, nextPage: Page) => {
+    if (window.location.pathname !== path) window.history.pushState({}, '', path);
+    setPage(nextPage);
+  };
+  const goHome = () => navigate('/', 'home');
+  const goShop = () => navigate('/magaza', 'shop');
+  const goContact = () => navigate('/iletisim', 'contact');
+  const goSocial = () => navigate('/sosyal', 'social');
+  const goBrewing = () => navigate('/kahve-akademisi', 'brewing');
+  const goCart = () => navigate('/sepet', 'cart');
   const goAccount = (mode?: 'login' | 'signup') => {
     const path = mode === 'signup' ? '/uye-ol' : mode === 'login' ? '/giris' : '/hesabim';
     window.history.pushState({}, '', path);
@@ -114,15 +116,12 @@ function AppContent() {
   if (page === 'social') return <SocialFeedPage {...navProps} />;
   if (page === 'brewing') return <BrewingPage />;
   if (page === 'cart') return <><Header {...navProps} /><CartPage onShop={goShop} /><Footer /></>;
-  if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={window.location.pathname === '/uye-ol' ? 'signup' : window.location.pathname === '/sifremi-unuttum' ? 'forgot' : 'login'} onBack={goShop} /><Footer /></>;
+  if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={window.location.pathname === '/uye-ol' ? 'signup' : window.location.pathname === '/sifremi-unuttum' ? 'forgot' : window.location.pathname === '/sifre-sifirla' ? 'reset' : 'login'} onBack={goShop} /><Footer /></>;
   if (selectedProduct) return <><Header {...navProps} /><ProductDetail product={selectedProduct} onBack={() => { setSelectedProduct(null); setPage('shop'); }} onProductClick={handleCatalogProduct} /><Footer /></>;
 
   return (
     <div
-      style={{
-        opacity: siteVisible ? 1 : 0,
-        transition: 'opacity 700ms ease',
-      }}
+      style={{ opacity: 1 }}
     >
       <Header {...navProps} />
       {page === 'shop' ? (
