@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { StoreProvider } from './context/StoreContext';
-import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HeroSection from './components/HeroSection';
@@ -32,17 +31,8 @@ function pageFromPath(pathname: string): Page {
 }
 
 function AppContent() {
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<Page>(() => pageFromPath(window.location.pathname));
-  const [siteVisible, setSiteVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  useEffect(() => {
-    if (!loading) {
-      const t = setTimeout(() => setSiteVisible(true), 50);
-      return () => clearTimeout(t);
-    }
-  }, [loading]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -54,14 +44,16 @@ function AppContent() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  if (loading) return <LoadingScreen onComplete={() => setLoading(false)} />;
-
-  const goHome = () => { window.history.pushState({}, '', '/'); setPage('home'); };
-  const goShop = () => { window.history.pushState({}, '', '/magaza'); setPage('shop'); };
-  const goContact = () => setPage('contact');
-  const goSocial = () => setPage('social');
-  const goBrewing = () => setPage('brewing');
-  const goCart = () => { window.history.pushState({}, '', '/sepet'); setPage('cart'); };
+  const navigate = (path: string, nextPage: Page) => {
+    if (window.location.pathname !== path) window.history.pushState({}, '', path);
+    setPage(nextPage);
+  };
+  const goHome = () => navigate('/', 'home');
+  const goShop = () => navigate('/magaza', 'shop');
+  const goContact = () => navigate('/iletisim', 'contact');
+  const goSocial = () => navigate('/sosyal', 'social');
+  const goBrewing = () => navigate('/kahve-akademisi', 'brewing');
+  const goCart = () => navigate('/sepet', 'cart');
   const goAccount = (mode?: 'login' | 'signup') => {
     const path = mode === 'signup' ? '/uye-ol' : mode === 'login' ? '/giris' : '/hesabim';
     window.history.pushState({}, '', path);
@@ -129,10 +121,7 @@ function AppContent() {
 
   return (
     <div
-      style={{
-        opacity: siteVisible ? 1 : 0,
-        transition: 'opacity 700ms ease',
-      }}
+      style={{ opacity: 1 }}
     >
       <Header {...navProps} />
       {page === 'shop' ? (
