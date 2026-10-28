@@ -9,19 +9,20 @@
 ═══════════════════════════════════════════ */
 
 :root {
-  --bg:            #F4F3EE;
+  --bg:            #F8F5ED;
   --bg-secondary:  #ECEBE6;
-  --surface:       #F8F7F4;
+  --surface:       #FFFCF6;
   --surface-hover: #ECEBE6;
 
-  --text-primary:   #111111;
-  --text-secondary: #555555;
+  --text-primary:   #101D38;
+  --text-secondary: #4D5668;
   --text-muted:     #A8A7A1;
   --text-disabled:  #C8C8C5;
 
-  --accent:        #D7A85C;
+  --accent:        #C99A48;
   --accent-hover:  #E8B85D;
   --accent-dark:   #9A6424;
+  --sage:          #71896B;
 
   --border:        #DEDDD7;
   --border-strong: #C9C8C2;
