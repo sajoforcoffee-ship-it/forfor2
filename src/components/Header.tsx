@@ -72,14 +72,13 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
       <header
         className="sticky top-0 z-50 w-full"
         style={{
-          height: scrolled ? '72px' : '85px',
+          height: scrolled ? '72px' : '82px',
           backgroundColor: scrolled
-            ? (theme === 'dark' ? 'rgba(18,22,32,0.92)' : 'rgba(255,255,255,0.92)')
-            : (theme === 'dark' ? 'rgba(11,15,25,0.40)' : 'rgba(255,255,255,0.55)'),
+            ? 'rgba(16, 29, 56, 0.92)'
+            : 'rgba(18, 24, 34, 0.28)',
           backdropFilter: 'blur(24px)',
-          borderBottom: `1px solid ${scrolled
-            ? 'rgba(143,169,139,0.20)'
-            : (theme === 'dark' ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)')}`,
+          border: scrolled ? '1px solid rgba(232,184,93,0.28)' : '1px solid rgba(255,255,255,0.16)',
+          borderRadius: scrolled ? '0 0 24px 24px' : '0 0 28px 28px',
           boxShadow: scrolled ? `0 12px 40px ${theme === 'dark' ? 'rgba(0,0,0,.28)' : 'rgba(0,0,0,.08)'}` : 'none',
           transition,
         }}
