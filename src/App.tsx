@@ -8,26 +8,19 @@ import BestSellers from './components/BestSellers';
 import ProductDetail from './components/ProductDetail';
 import type { Product } from './components/BestSellers';
 import FeaturedProduct from './components/FeaturedProduct';
-import CoffeeBlog from './components/CoffeeBlog';
-import CoffeeAcademy from './components/CoffeeAcademy';
 import StorePage from './components/StorePage';
-import ContactPage from './components/ContactPage';
-import SocialFeedPage from './components/SocialFeedPage';
-import BrewingPage from './components/BrewingPage';
 import CartPage from './components/CartPage';
 import AccountPage from './components/AccountPage';
 import coffeeProducts from './data/coffee-products.json';
 
-type Page = 'home' | 'shop' | 'contact' | 'social' | 'brewing' | 'cart' | 'account';
+type Page = 'home' | 'shop' | 'cart' | 'account' | 'not-found';
 
 function pageFromPath(pathname: string): Page {
   if (pathname === '/magaza') return 'shop';
   if (pathname === '/sepet') return 'cart';
   if (['/hesabim', '/giris', '/uye-ol', '/sifremi-unuttum', '/sifre-sifirla'].includes(pathname)) return 'account';
-  if (pathname === '/iletisim' || pathname === '/hakkimizda') return 'contact';
-  if (pathname === '/sosyal') return 'social';
-  if (pathname === '/kahve-akademisi' || pathname === '/demleme') return 'brewing';
-  return 'home';
+  if (pathname === '/') return 'home';
+  return 'not-found';
 }
 
 function AppContent() {
@@ -50,9 +43,6 @@ function AppContent() {
   };
   const goHome = () => navigate('/', 'home');
   const goShop = () => navigate('/magaza', 'shop');
-  const goContact = () => navigate('/iletisim', 'contact');
-  const goSocial = () => navigate('/sosyal', 'social');
-  const goBrewing = () => navigate('/kahve-akademisi', 'brewing');
   const goCart = () => navigate('/sepet', 'cart');
   const goAccount = (mode?: 'login' | 'signup') => {
     const path = mode === 'signup' ? '/uye-ol' : mode === 'login' ? '/giris' : '/hesabim';
@@ -104,17 +94,11 @@ function AppContent() {
   const navProps = {
     onNavigateHome: goHome,
     onNavigateShop: goShop,
-    onNavigateContact: goContact,
-    onNavigateSocial: goSocial,
-    onNavigateBrewing: goBrewing,
-    onNavigateAbout: goContact,
     onNavigateCart: goCart,
     onNavigateAccount: goAccount,
   };
 
-  if (page === 'contact') return <ContactPage {...navProps} />;
-  if (page === 'social') return <SocialFeedPage {...navProps} />;
-  if (page === 'brewing') return <BrewingPage />;
+  if (page === 'not-found') return <><Header {...navProps} /><main className="container-luxury flex min-h-[55vh] flex-col items-center justify-center px-6 text-center"><p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em]" style={{ color: 'var(--accent)' }}>404</p><h1 className="mb-4 text-4xl md:text-5xl">Sayfa bulunamadı</h1><p className="mb-8 max-w-md" style={{ color: 'var(--text-secondary)' }}>Aradığınız sayfa mağazada mevcut değil.</p><button type="button" className="btn-primary" onClick={goShop}>Mağazaya git</button></main><Footer /></>;
   if (page === 'cart') return <><Header {...navProps} /><CartPage onShop={goShop} /><Footer /></>;
   if (page === 'account') return <><Header {...navProps} /><AccountPage initialMode={window.location.pathname === '/uye-ol' ? 'signup' : window.location.pathname === '/sifremi-unuttum' ? 'forgot' : window.location.pathname === '/sifre-sifirla' ? 'reset' : 'login'} onBack={goShop} /><Footer /></>;
   if (selectedProduct) return <><Header {...navProps} /><ProductDetail product={selectedProduct} onBack={() => { setSelectedProduct(null); setPage('shop'); }} onProductClick={handleCatalogProduct} /><Footer /></>;
@@ -131,8 +115,6 @@ function AppContent() {
           <HeroSection />
           <BestSellers onShopClick={goShop} onProductClick={handleCatalogProduct} />
           <FeaturedProduct />
-          <CoffeeAcademy />
-          <CoffeeBlog />
         </>
       )}
       <Footer />

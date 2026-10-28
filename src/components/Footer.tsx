@@ -14,20 +14,20 @@ const Footer = () => {
       ],
     },
     {
-      title: 'Akademi',
+      title: 'Mağaza Desteği',
       links: [
-        ['Espresso Akademisi', '#'],
-        ['Latte Art Eğitimi', '#'],
-        ['Demleme Eğitimleri', '#'],
-        ['Dijital Akademi', '#'],
+        ['Sık Sorulan Sorular', 'https://www.forcoffeetr.com/sss.html'],
+        ['Kargo Takibi', 'https://www.forcoffeetr.com/magaza/kargo-takibi/'],
+        ['İade Politikası', 'https://www.forcoffeetr.com/magaza/iade-politikasi/'],
+        ['Gizlilik Politikası', 'https://www.forcoffeetr.com/magaza/kvkk-aydinlatma-metni/'],
       ],
     },
     {
-      title: 'Kurumsal',
+      title: 'Hızlı Erişim',
       links: [
-        ['Hakkımızda', 'https://www.forcoffeetr.com/hakkimizda.html'],
-        ['Blog', 'https://www.forcoffeetr.com/blog/'],
-        ['Kariyer', '#'],
+        ['Tüm Kahveler', '/magaza'],
+        ['Hesabım', '/hesabim'],
+        ['Sepetim', '/sepet'],
         ['İletişim', '/iletisim'],
       ],
     },
@@ -62,7 +62,7 @@ const Footer = () => {
             Premium Üyelik
           </h2>
           <p className="text-sm max-w-md mx-auto mb-8" style={{ color: 'var(--footer-text)' }}>
-            Yeni kavurumlar, özel eğitimler ve premium kampanyalardan ilk siz haberdar olun.
+            Yeni kavurumlar, ürün lansmanları ve mağaza kampanyalarından ilk siz haberdar olun.
           </p>
           <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
             <input type="email" placeholder="E-posta adresiniz"
@@ -115,7 +115,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="mt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs" style={{ color: 'var(--footer-text)' }}>
-            © 2026 FOR COFFEE Coffee Roasting Academy
+            © 2026 FOR COFFEE Specialty Coffee
           </p>
           <div className="flex items-center gap-3">
             {['VISA', 'MC', 'TROY', 'Apple Pay'].map(c => (

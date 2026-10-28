@@ -1,57 +1,24 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Menu, X, ShoppingBag, User, UserRound, UserRoundPlus, LogIn, Heart, Search, ChevronDown, ArrowRight, Package, MapPin, Settings, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X, ShoppingBag, User, UserRound, UserRoundPlus, LogIn, Heart, Search, ArrowRight, Package, MapPin, Settings, LogOut } from 'lucide-react';
 import { useStore } from '../context/useStore';
 import { supabase } from '../services/supabase';
 
 interface HeaderProps {
   onNavigateHome?: () => void;
   onNavigateShop?: () => void;
-  onNavigateContact?: () => void;
-  onNavigateSocial?: () => void;
-  onNavigateBrewing?: () => void;
-  onNavigateAbout?: () => void;
   onNavigateCart?: () => void;
   onNavigateAccount?: (mode?: 'login' | 'signup') => void;
 }
 
-const megaMenuData = [
-  {
-    title: 'Single Origin Kahveler',
-    desc: 'Dünyanın seçkin çiftliklerinden özenle seçilmiş, karakteristik aromalara sahip tek köken kahveler.',
-    image: 'https://www.forcoffeetr.com/magaza/wp-content/uploads/2026/02/guatemala-antigua.png',
-    href: 'https://www.forcoffeetr.com/magaza/kategori/single-origin/',
-  },
-  {
-    title: 'Special Blend Kahveler',
-    desc: 'Farklı kökenlerin dengeli şekilde bir araya geldiği, espresso ve günlük kullanım için özel harmanlar.',
-    image: 'https://www.forcoffeetr.com/magaza/wp-content/uploads/2026/02/espressoblend.png',
-    href: 'https://www.forcoffeetr.com/magaza/urun/special-espresso-blend/',
-  },
-  {
-    title: 'Demleme Ekipmanları',
-    desc: 'Kahvenizi daha iyi hazırlamanız için seçilmiş V60, Chemex, French Press, moka pot ve diğer demleme ekipmanları.',
-    image: 'https://www.forcoffeetr.com/magaza/wp-content/uploads/2026/02/costarica-terrazu.png',
-    href: 'https://www.forcoffeetr.com/magaza/kategori/filtre-kahveler/',
-  },
-  {
-    title: 'Termoslar',
-    desc: 'Kahvenizin keyfini her yerde sürdürmeniz için seçilmiş şık ve kullanışlı termos seçenekleri.',
-    image: 'https://www.forcoffeetr.com/magaza/wp-content/uploads/2026/02/ChatGPT-Image-4-Sub-2026-09_20_56.png',
-    href: 'https://www.forcoffeetr.com/magaza/kategori/termoslar/',
-  },
-];
-
-const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateSocial, onNavigateBrewing, onNavigateAbout, onNavigateCart, onNavigateAccount }: HeaderProps) => {
+const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAccount }: HeaderProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const theme = 'dark';
   const { cartCount, cart, cartTotal, removeFromCart, updateQuantity, favorites } = useStore();
   const [user, setUser] = useState<{ email?: string | null; user_metadata?: { first_name?: string; last_name?: string } } | null>(null);
-  const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
 
@@ -78,27 +45,20 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setSearchOpen(false); setAccountOpen(false); setCartOpen(false); setMobileOpen(false); setMegaOpen(false); }
+      if (e.key === 'Escape') { setSearchOpen(false); setAccountOpen(false); setCartOpen(false); setMobileOpen(false); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const handleMegaEnter = useCallback(() => {
-    if (megaTimeout.current) clearTimeout(megaTimeout.current);
-    setMegaOpen(true);
-  }, []);
-
-  const handleMegaLeave = useCallback(() => {
-    megaTimeout.current = setTimeout(() => setMegaOpen(false), 200);
-  }, []);
-
   const navItems = [
-    { label: 'Anasayfa', cb: onNavigateHome },
-    { label: 'Mağaza', mega: true },
-    { label: 'Kahve Akademisi', cb: onNavigateBrewing },
-    { label: 'Hakkımızda' },
-    { label: 'İletişim', cb: onNavigateContact },
+    { label: 'Ana Sayfa', cb: onNavigateHome },
+    { label: 'Tüm Kahveler', cb: onNavigateShop },
+    { label: 'Single Origin', cb: onNavigateShop },
+    { label: 'Harmanlar', cb: onNavigateShop },
+    { label: 'Espresso', cb: onNavigateShop },
+    { label: 'Filtre Kahveler', cb: onNavigateShop },
+    { label: 'Kampanyalar', cb: onNavigateShop },
   ];
 
   const textColor = scrolled
@@ -147,42 +107,22 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateContact, onNavigateS
               />
             </button>
             <div className="hidden lg:flex items-center gap-10">
-              {navItems.map(item =>
-                item.mega ? (
-                  <div key={item.label} className="relative" onMouseEnter={handleMegaEnter} onMouseLeave={handleMegaLeave}>
-                    <button
-                      onClick={onNavigateShop}
-                      className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300"
-                      style={{ color: megaOpen ? accentColor : textColor }}
-                      onMouseEnter={e => { e.currentTarget.style.color = accentColor; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = megaOpen ? accentColor : textColor; }}
-                    >
-                      {item.label}
-                      <ChevronDown
-                        size={11}
-                        strokeWidth={2}
-                        className={`transition-transform duration-300 ${megaOpen ? 'rotate-180' : ''}`}
-                        style={{ color: megaOpen ? accentColor : undefined }}
-                      />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    key={item.label}
-                    onClick={item.cb}
-                    className="relative text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 group"
-                    style={{ color: textColor }}
-                    onMouseEnter={e => { e.currentTarget.style.color = accentColor; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = textColor; }}
-                  >
-                    {item.label}
-                    <span
-                      className="absolute -bottom-1 left-1/2 w-0 h-px transition-all duration-300 group-hover:w-full"
-                      style={{ left: '50%', transform: 'translateX(-50%)', background: accentColor }}
-                    />
-                  </button>
-                )
-              )}
+              {navItems.map(item => (
+                <button
+                  key={item.label}
+                  onClick={item.cb}
+                  className="relative text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 group"
+                  style={{ color: textColor }}
+                  onMouseEnter={e => { e.currentTarget.style.color = accentColor; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = textColor; }}
+                >
+                  {item.label}
+                  <span
+                    className="absolute -bottom-1 left-1/2 w-0 h-px transition-all duration-300 group-hover:w-full"
+                    style={{ left: '50%', transform: 'translateX(-50%)', background: accentColor }}
+                  />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -305,84 +245,6 @@ href="/hesabim" onClick={(event) => { event.preventDefault(); onNavigateAccount?
           </div>
         </div>
 
-        {/* Mega Menu Panel — overlay, does not push page content */}
-        <div
-          className={`absolute left-0 right-0 top-full transition-all duration-300 ${megaOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
-          style={{ pointerEvents: megaOpen ? 'auto' : 'none' }}
-          onMouseEnter={handleMegaEnter}
-          onMouseLeave={handleMegaLeave}
-        >
-          <div className="container-luxury" style={{ paddingTop: '16px', paddingBottom: '24px' }}>
-            <div
-              className="p-6 lg:p-8"
-              style={{
-                borderRadius: '32px',
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                boxShadow: '0 24px 60px var(--shadow-strong)',
-              }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: '20px' }}>
-                {megaMenuData.map(cat => (
-                  <a
-                    key={cat.title}
-                    href={cat.href}
-                    className="group block overflow-hidden"
-                    style={{
-                      borderRadius: '24px',
-                      border: '1px solid var(--border)',
-                      backgroundColor: 'var(--bg-secondary)',
-                      transition: 'transform 300ms cubic-bezier(0.22,1,0.36,1), border-color 300ms ease, box-shadow 300ms ease',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(143,169,139,0.40)';
-                      e.currentTarget.style.boxShadow = '0 16px 48px var(--shadow-strong)';
-                      e.currentTarget.style.transform = 'translateY(-6px)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'var(--border)';
-                      e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.transform = '';
-                    }}
-                  >
-                    {/* Image — 4:3 aspect ratio */}
-                    <div className="relative overflow-hidden" style={{ aspectRatio: '4/3', borderRadius: '24px 24px 0 0' }}>
-                      <img
-                        src={cat.image}
-                        alt={cat.title}
-                        className="w-full h-full object-cover"
-                        style={{ transition: 'transform 400ms cubic-bezier(0.22,1,0.36,1)' }}
-                      />
-                      <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.25), transparent 40%)' }} />
-                    </div>
-                    {/* Text content */}
-                    <div className="p-5 lg:p-6">
-                      <h3
-                        className="font-serif font-semibold mb-2"
-                        style={{ color: 'var(--text-primary)', fontSize: '18px', lineHeight: 1.3 }}
-                      >
-                        {cat.title}
-                      </h3>
-                      <p
-                        className="mb-4"
-                        style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6 }}
-                      >
-                        {cat.desc}
-                      </p>
-                      <div
-                        className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest transition-all duration-300"
-                        style={{ color: 'var(--accent)' }}
-                      >
-                        İncele
-                        <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1.5" />
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </header>
 
       {/* Search overlay */}
@@ -561,11 +423,13 @@ Sepete git
             </div>
             <nav className="mobile-primary-nav">
               {[
-                { label: 'Anasayfa', cb: onNavigateHome },
-                { label: 'Kahve Akademisi', cb: onNavigateBrewing },
-    { label: 'Hakkımızda', cb: onNavigateAbout || onNavigateContact },
-                { label: 'Sosyal', cb: onNavigateSocial },
-                { label: 'İletişim', cb: onNavigateContact },
+                { label: 'Ana Sayfa', cb: onNavigateHome },
+                { label: 'Tüm Kahveler', cb: onNavigateShop },
+                { label: 'Single Origin', cb: onNavigateShop },
+                { label: 'Harmanlar', cb: onNavigateShop },
+                { label: 'Espresso', cb: onNavigateShop },
+                { label: 'Filtre Kahveler', cb: onNavigateShop },
+                { label: 'Kampanyalar', cb: onNavigateShop },
               ].map(item => (
                 <button
                   key={item.label}
