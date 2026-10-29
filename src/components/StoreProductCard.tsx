@@ -51,8 +51,9 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '12px',
+        borderRadius: '18px',
         overflow: 'hidden',
+        boxShadow: '0 12px 32px var(--shadow)',
         transition: 'border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease',
       }}
       onMouseEnter={e => {
@@ -67,7 +68,7 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
       }}
     >
       {/* Image */}
-      <div role="button" tabIndex={0} className="relative block w-full overflow-hidden text-left" style={{ aspectRatio: '4/5', backgroundColor: 'var(--bg-secondary)', cursor: 'pointer' }} onClick={() => onInspect(product)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') onInspect(product); }} aria-label={`${product.name} detayını aç`}>
+      <div role="button" tabIndex={0} className="relative block w-full overflow-hidden text-left" style={{ aspectRatio: '4/5', backgroundColor: 'var(--bg-secondary)', cursor: 'pointer', borderBottom: '1px solid var(--border)' }} onClick={() => onInspect(product)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') onInspect(product); }} aria-label={`${product.name} detayını aç`}>
         {image ? (
           <img
             src={image}
@@ -88,7 +89,7 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {product.on_sale && (
             <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1"
-              style={{ backgroundColor: 'var(--accent)', color: '#fff', borderRadius: '4px' }}>
+              style={{ backgroundColor: 'var(--accent)', color: '#101827', borderRadius: '999px', border: '1px solid rgba(255,255,255,.25)' }}>
               İndirim
             </span>
           )}
@@ -159,9 +160,9 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
             aria-label={`${product.name} ürününü incele`}
             className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all"
             style={{
-              borderRadius: '8px',
-              backgroundColor: 'var(--text-primary)',
-              color: 'var(--surface)',
+              borderRadius: '999px',
+              backgroundColor: 'var(--accent)',
+              color: '#101827',
               border: '1px solid var(--border)',
               textDecoration: 'none',
             }}
