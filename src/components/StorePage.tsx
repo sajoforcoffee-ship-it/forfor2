@@ -19,6 +19,15 @@ const CATEGORY_MAP: Record<string, string> = {
   'moka-pot': 'Moka Pot',
 };
 
+const CAMPAIGN_BANNER = {
+  enabled: true,
+  eyebrow: 'FOR COFFEE SELECTION',
+  title: 'Kahveni seç, ritmini keşfet.',
+  description: 'Single origin çekirdeklerden dengeli harmanlara, taze kavrulmuş seçkilerimizi keşfet.',
+  image: 'https://www.forcoffeetr.com/wp-content/uploads/2026/10/sumatra-blue-batak.jpg',
+  href: '#catalog',
+};
+
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'default',       label: 'Önerilen' },
   { value: 'newest',        label: 'Yeni Gelenler' },
@@ -300,36 +309,20 @@ export default function StorePage({ onProductInspect }: StorePageProps) {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg)' }}>
-      {/* ── Store Hero ── */}
-      <section className="pt-12 pb-8 md:pt-20 md:pb-12 px-4" style={{ borderBottom: '1px solid var(--border)' }}>
-        <div className="container-luxury">
-          <div className="max-w-2xl">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] block mb-4" style={{ color: 'var(--accent)' }}>
-              SPECIALTY COFFEE
-            </span>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] mb-4" style={{ color: 'var(--text-primary)' }}>
-              Daha İyi Bir<br />Kahve Dünyası.
-            </h1>
-            <p className="text-base md:text-lg max-w-lg mb-8" style={{ color: 'var(--text-secondary)' }}>
-              Dünyanın seçkin çiftliklerinden özenle tedarik edilen, her gün taze kavrulmuş specialty coffee çekirdekleri ve premium demleme ekipmanları.
-            </p>
-            <a
-              href="https://www.forcoffeetr.com/magaza/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold uppercase tracking-wider transition-all"
-              style={{
-                borderRadius: '8px',
-                backgroundColor: 'var(--text-primary)',
-                color: 'var(--surface)',
-              }}
-            >
-              Koleksiyonu Keşfet
-              <ArrowRight size={15} />
+      {/* ── Editable campaign banner ── */}
+      {CAMPAIGN_BANNER.enabled && (
+        <section id="campaign" className="campaign-banner" style={{ backgroundImage: `url(${CAMPAIGN_BANNER.image})` }}>
+          <div className="campaign-banner__overlay" />
+          <div className="container-luxury campaign-banner__content">
+            <span className="campaign-banner__eyebrow">{CAMPAIGN_BANNER.eyebrow}</span>
+            <h1>{CAMPAIGN_BANNER.title}</h1>
+            <p>{CAMPAIGN_BANNER.description}</p>
+            <a className="campaign-banner__cta" href={CAMPAIGN_BANNER.href}>
+              Koleksiyonu keşfet <ArrowRight size={16} aria-hidden="true" />
             </a>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Category Pills ── */}
       <section className="py-6 px-4" style={{ borderBottom: '1px solid var(--border)' }}>
@@ -418,7 +411,7 @@ export default function StorePage({ onProductInspect }: StorePageProps) {
 
               {/* States */}
               {loading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                   {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : error ? (
@@ -449,7 +442,7 @@ export default function StorePage({ onProductInspect }: StorePageProps) {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     {products.map(product => (
                       <StoreProductCard key={product.id} product={product} onInspect={onProductInspect} />
                     ))}

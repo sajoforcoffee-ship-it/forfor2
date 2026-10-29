@@ -60,8 +60,8 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
     { label: 'Kampanyalar', cb: onNavigateShop },
   ];
 
-  const textColor = '#101D38';
-  const iconColor = textColor;
+  const textColor = '#FFFCF6';
+  const iconColor = '#FFFCF6';
   const accentColor = 'var(--accent)';
 
   return (
@@ -71,12 +71,11 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
         style={{
           height: scrolled ? '72px' : '82px',
           backgroundColor: scrolled
-            ? 'rgba(255, 252, 246, 0.94)'
-            : 'rgba(255, 252, 246, 0.78)',
+            ? 'rgba(12, 18, 32, 0.96)'
+            : 'rgba(16, 29, 56, 0.98)',
           backdropFilter: 'blur(24px)',
-          border: scrolled ? '1px solid rgba(232,184,93,0.28)' : '1px solid rgba(255,255,255,0.16)',
-          borderRadius: scrolled ? '0 0 24px 24px' : '0 0 28px 28px',
-          boxShadow: scrolled ? '0 12px 40px rgba(16,29,56,.08)' : 'none',
+          borderBottom: '1px solid rgba(230,201,135,0.24)',
+          boxShadow: scrolled ? '0 12px 40px rgba(0,0,0,.18)' : 'none',
           transition,
         }}
       >

@@ -548,3 +548,40 @@
   0%   { opacity: 0; transform: translateY(16px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+/* Store campaign and product merchandising */
+.campaign-banner { position: relative; min-height: 330px; overflow: hidden; background-position: center; background-size: cover; border-bottom: 1px solid var(--border); }
+.campaign-banner__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(16,29,56,.94) 0%, rgba(16,29,56,.72) 45%, rgba(16,29,56,.12) 100%); }
+.campaign-banner__content { position: relative; z-index: 1; display: flex; min-height: 330px; max-width: 1240px; flex-direction: column; justify-content: center; align-items: flex-start; padding: 52px 24px; color: #FFFCF6; }
+.campaign-banner__eyebrow { margin-bottom: 12px; color: #E8B85D; font-size: 11px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; }
+.campaign-banner h1 { max-width: 580px; margin: 0 0 12px; color: #FFFCF6; font-size: clamp(42px, 6vw, 76px); line-height: .95; }
+.campaign-banner p { max-width: 480px; margin: 0 0 24px; color: rgba(255,252,246,.78); font-size: 16px; }
+.campaign-banner__cta { display: inline-flex; align-items: center; gap: 9px; border-radius: 999px; padding: 13px 20px; color: #101D38; background: #E8B85D; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transition: background .2s ease, transform .2s ease; }
+.campaign-banner__cta:hover { background: #F0C66C; transform: translateY(-2px); }
+.store-product-card { position: relative; }
+.store-product-card::before, .store-product-card::after { position: absolute; z-index: 3; width: 24px; height: 24px; content: ''; pointer-events: none; transition: width .3s ease, height .3s ease, border-color .3s ease, filter .3s ease; }
+.store-product-card::before { top: 10px; left: 10px; border-top: 1px solid rgba(201,154,72,.34); border-left: 1px solid rgba(201,154,72,.34); }
+.store-product-card::after { right: 10px; bottom: 10px; border-right: 1px solid rgba(201,154,72,.34); border-bottom: 1px solid rgba(201,154,72,.34); }
+.store-product-card:hover::before, .store-product-card:hover::after, .store-product-card:focus-within::before, .store-product-card:focus-within::after { width: 34px; height: 34px; border-color: #F0C66C; filter: drop-shadow(0 0 5px rgba(240,198,108,.65)); }
+.store-product-card:focus-within { outline: 2px solid #E8B85D; outline-offset: 4px; }
+@media (max-width: 700px) { .campaign-banner, .campaign-banner__content { min-height: 300px; } .campaign-banner__content { padding: 40px 20px; } .campaign-banner__overlay { background: linear-gradient(90deg, rgba(16,29,56,.9), rgba(16,29,56,.48)); } .campaign-banner h1 { font-size: 44px; } .campaign-banner p { font-size: 14px; max-width: 330px; } }
+
+/* Product content stays airy while the global header remains dark. */
+.product-detail-page { background: var(--bg); color: var(--text-primary); }
+.product-back { color: var(--text-secondary); }
+.product-back:hover, .product-detail-page .eyebrow, .product-price { color: var(--accent-dark); }
+.product-detail-copy h1, .product-option h2, .product-info-heading h2 { color: var(--text-primary); }
+.product-detail-lead, .product-rich-copy p, .product-trust, .product-spec-list dt { color: var(--text-secondary); }
+.product-gallery { background: var(--surface); border-color: var(--border-strong); box-shadow: 0 24px 64px var(--shadow-strong); }
+.product-six-info article, .product-info-grid article, .recommended-card { background: var(--surface); border-color: var(--border); box-shadow: 0 12px 32px var(--shadow); }
+.product-six-info strong, .product-spec-list dd, .recommended-card h3 { color: var(--text-primary); }
+.product-six-info .eyebrow, .product-info-grid h3, .recommended-card span { color: var(--accent-dark); }
+.product-option, .product-information, .product-recommendations { border-color: var(--border); }
+.option-row button, .option-grid button { color: var(--text-secondary); background: var(--surface); border-color: var(--border); box-shadow: none; }
+.option-row button:hover, .option-grid button:hover, .option-row button.is-selected, .option-grid button.is-selected { color: #101D38; border-color: var(--accent-hover); background: var(--accent-hover); }
+.quantity { border-color: var(--border-strong); }
+.quantity button { color: var(--text-primary); }
+.add-product { background: var(--accent); color: #101D38; }
+.product-info-grid h3 { color: var(--accent-dark); }
+.recommended-card-media { background: var(--bg-secondary); }
+.recommended-card p, .recommended-card small { color: var(--text-secondary); }

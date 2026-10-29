@@ -47,7 +47,7 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
 
   return (
     <article
-      className="group flex flex-col h-full"
+      className="store-product-card group flex flex-col h-full"
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
@@ -158,7 +158,7 @@ export default function StoreProductCard({ product, onInspect }: StoreProductCar
             type="button"
             onClick={() => onInspect(product)}
             aria-label={`${product.name} ürününü incele`}
-            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-hover)]"
             style={{
               borderRadius: '999px',
               backgroundColor: 'var(--accent)',
