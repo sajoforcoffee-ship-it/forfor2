@@ -107,7 +107,7 @@ function AppContent() {
     <div
       style={{ opacity: 1 }}
     >
-      <Header {...navProps} />
+      {page !== 'home' && <Header {...navProps} />}
       {page === 'shop' ? (
           <StorePage onProductInspect={handleProductInspect} />
       ) : (
