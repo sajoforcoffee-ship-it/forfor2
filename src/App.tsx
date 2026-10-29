@@ -112,7 +112,7 @@ function AppContent() {
           <StorePage onProductInspect={handleProductInspect} />
       ) : (
         <>
-          <HeroSection onShop={goShop} />
+          <HeroSection />
           <BestSellers onShopClick={goShop} onProductClick={handleCatalogProduct} />
           <FeaturedProduct />
         </>

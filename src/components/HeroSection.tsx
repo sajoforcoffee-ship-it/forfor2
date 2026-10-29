@@ -12,7 +12,7 @@ const HERO_SLIDES = [
   },
 ] as const;
 
-const HeroSection = ({ onShop }: { onShop: () => void }) => {
+const HeroSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -47,16 +47,6 @@ const HeroSection = ({ onShop }: { onShop: () => void }) => {
         fetchPriority={activeIndex === 0 ? "high" : "auto"}
         decoding="async"
       />
-      <div className="hero-banner__veil" aria-hidden="true" />
-      <div className="hero-banner__content">
-        <p className="hero-banner__eyebrow">FOR COFFEE · SPECIALTY ROASTERS</p>
-        <h1>Özenle kavrulmuş kahve, <em>senin ritmin.</em></h1>
-        <p className="hero-banner__lead">Single origin kahvelerden dengeli harmanlara, her fincanda iz bırakan bir keşif.</p>
-        <div className="hero-banner__actions">
-          <button type="button" className="hero-banner__primary" onClick={onShop}>Kahveleri keşfet</button>
-          <button type="button" className="hero-banner__secondary" onClick={() => goTo(activeIndex + 1)}>Koleksiyonu gör <ChevronRight size={16} aria-hidden="true" /></button>
-        </div>
-      </div>
       <button
         type="button"
         className="hero-banner__arrow hero-banner__arrow--prev"
