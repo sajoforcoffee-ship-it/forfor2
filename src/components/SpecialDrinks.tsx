@@ -1,7 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useTheme } from '../context/useTheme';
 
 interface SpecialDrinksProps {
   onNavigate?: (page: string) => void;
@@ -274,8 +273,7 @@ function DrinkCard({
 }
 
 export default function SpecialDrinks({ onNavigate }: SpecialDrinksProps) {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = false;
   const [activeIndex, setActiveIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);

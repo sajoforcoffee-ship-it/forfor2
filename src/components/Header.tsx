@@ -16,7 +16,6 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const theme = 'dark';
   const { cartCount, cart, cartTotal, removeFromCart, updateQuantity, favorites } = useStore();
   const [user, setUser] = useState<{ email?: string | null; user_metadata?: { first_name?: string; last_name?: string } } | null>(null);
 
@@ -61,9 +60,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
     { label: 'Kampanyalar', cb: onNavigateShop },
   ];
 
-  const textColor = scrolled
-    ? (theme === 'dark' ? '#F5F2EB' : '#1A1A1A')
-    : (theme === 'dark' ? '#F5F2EB' : '#1A1A1A');
+  const textColor = '#101D38';
   const iconColor = textColor;
   const accentColor = 'var(--accent)';
 
@@ -74,12 +71,12 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
         style={{
           height: scrolled ? '72px' : '82px',
           backgroundColor: scrolled
-            ? 'rgba(16, 29, 56, 0.92)'
-            : 'rgba(18, 24, 34, 0.28)',
+            ? 'rgba(255, 252, 246, 0.94)'
+            : 'rgba(255, 252, 246, 0.78)',
           backdropFilter: 'blur(24px)',
           border: scrolled ? '1px solid rgba(232,184,93,0.28)' : '1px solid rgba(255,255,255,0.16)',
           borderRadius: scrolled ? '0 0 24px 24px' : '0 0 28px 28px',
-          boxShadow: scrolled ? `0 12px 40px ${theme === 'dark' ? 'rgba(0,0,0,.28)' : 'rgba(0,0,0,.08)'}` : 'none',
+          boxShadow: scrolled ? '0 12px 40px rgba(16,29,56,.08)' : 'none',
           transition,
         }}
       >

@@ -1,8 +1,5 @@
 import { Instagram, Youtube, Linkedin, ArrowRight, Gem } from 'lucide-react';
-import { useTheme } from '../context/useTheme';
-
 const Footer = () => {
-  const { theme } = useTheme();
   const columns = [
     {
       title: 'Kahvelerimiz',
@@ -104,9 +101,9 @@ const Footer = () => {
           {socials.map(({ icon: Icon, href, label }) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer"
               className="w-11 h-11 flex items-center justify-center rounded-full transition-all duration-300"
-              style={{ border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`, color: 'var(--footer-text)' }}
+              style={{ border: `1px solid ${'rgba(16,29,56,0.12)'}`, color: 'var(--footer-text)' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'var(--footer-text)'; }}>
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(16,29,56,0.12)'; e.currentTarget.style.color = 'var(--footer-text)'; }}>
               <Icon size={18} strokeWidth={1.5} />
             </a>
           ))}
@@ -120,7 +117,7 @@ const Footer = () => {
           <div className="flex items-center gap-3">
             {['VISA', 'MC', 'TROY', 'Apple Pay'].map(c => (
               <span key={c} className="px-3 py-1.5 rounded-luxury text-[10px] font-bold"
-                style={{ border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`, color: 'var(--footer-text)', backgroundColor: 'var(--footer-surface)' }}>
+                style={{ border: `1px solid ${'rgba(16,29,56,0.12)'}`, color: 'var(--footer-text)', backgroundColor: 'var(--footer-surface)' }}>
                 {c}
               </span>
             ))}
