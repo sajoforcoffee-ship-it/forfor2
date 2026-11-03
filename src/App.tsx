@@ -80,6 +80,7 @@ function AppContent() {
       flavorNotes: catalogProduct?.description || product.short_description || product.description,
       roastLevel: catalogProduct?.roast || product.roast || 'Detayları inceleyin',
       accent: '#D7A85C',
+      atmosphere: { primary: '#182235', secondary: '#C9A15B' },
       description: catalogProduct?.description || product.description,
       tastingNotes: catalogProduct?.tastingNotes || product.tasting_notes || product.short_description,
       brewing: catalogProduct?.brewing || product.brewing,

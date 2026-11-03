@@ -11,6 +11,7 @@ export interface Product {
   flavorNotes: string;
   roastLevel: string;
   accent: string;
+  atmosphere: { primary: string; secondary: string };
   description?: string;
   tastingNotes?: string;
   brewing?: string;
@@ -30,7 +31,8 @@ export const products: Product[] = [
     origin: "Çok Satanlar • Espresso Serisi",
     flavorNotes: "Çikolata, karamel ve kavrulmuş fındık notaları.",
     roastLevel: "Espresso Serisi",
-    accent: "#4A7FB5",
+    accent: "#C9A15B",
+    atmosphere: { primary: "#111111", secondary: "#B8863B" },
   },
   {
     id: 2,
@@ -40,7 +42,8 @@ export const products: Product[] = [
     origin: "Harman",
     flavorNotes: "Kırmızı meyve, çikolata ve karamel notaları.",
     roastLevel: "Orta",
-    accent: "#E86A5C",
+    accent: "#A94E43",
+    atmosphere: { primary: "#541F24", secondary: "#B65A48" },
   },
   {
     id: 3,
@@ -50,7 +53,8 @@ export const products: Product[] = [
     origin: "Nikaragua",
     flavorNotes: "Yasemin, narenciye, karamel ve fındık notaları.",
     roastLevel: "Dengeli",
-    accent: "#F4B860",
+    accent: "#D6B16A",
+    atmosphere: { primary: "#152A47", secondary: "#D4AA60" },
   },
   {
     id: 4,
@@ -61,7 +65,8 @@ export const products: Product[] = [
     origin: "Kolombiya",
     flavorNotes: "Karamel, fındık, dengeli asidite",
     roastLevel: "Orta",
-    accent: "#5BBF8A",
+    accent: "#70C89A",
+    atmosphere: { primary: "#0D4638", secondary: "#6DAE7C" },
   },
   {
     id: 5,
@@ -71,7 +76,8 @@ export const products: Product[] = [
     origin: "İtalyan usulü",
     flavorNotes: "Yoğun aroma, dolgun gövde ve ipeksi içim.",
     roastLevel: "Özel harman",
-    accent: "#D7A85C",
+    accent: "#C68A4F",
+    atmosphere: { primary: "#24272A", secondary: "#B4663D" },
   },
   {
     id: 6,
@@ -81,7 +87,8 @@ export const products: Product[] = [
     origin: "Endonezya",
     flavorNotes: "Bitter çikolata, topraksı baharat ve sedir ağacı notaları. Yoğun gövde, düşük asidite ve kalıcı aroma.",
     roastLevel: "Orta-Koyu",
-    accent: "#78966F",
+    accent: "#8CA8C7",
+    atmosphere: { primary: "#102C4A", secondary: "#7E99B5" },
   },
   {
     id: 7,
@@ -91,7 +98,8 @@ export const products: Product[] = [
     origin: "Jamaika",
     flavorNotes: "Bal, karamel, sütlü çikolata ve hafif narenciye notaları. Yumuşak içim, dengeli asidite ve rafine aroma.",
     roastLevel: "Orta",
-    accent: "#79A9C7",
+    accent: "#D99A56",
+    atmosphere: { primary: "#70401D", secondary: "#D08A48" },
   },
   {
     id: 8,
@@ -102,6 +110,7 @@ export const products: Product[] = [
     flavorNotes: "Bitter çikolata, karamel ve hafif fındık notaları. Yumuşak içim, dengeli gövde ve %100 Arabica.",
     roastLevel: "Kafeinsiz",
     accent: "#B98B6B",
+    atmosphere: { primary: "#172A42", secondary: "#B98B6B" },
   },
 ];
 
@@ -207,12 +216,27 @@ export default function App({ onShopClick, onProductClick }: { onShopClick?: () 
       className="relative overflow-hidden py-10 md:py-14"
       style={{ backgroundColor: "#0B0A08", color: "#fff" }}
     >
-      {/* Soft accent glow follows active card */}
+      {/* Layered ambient light follows the active product without covering its content. */}
       <div
+        key={`ambient-${active.id}`}
         aria-hidden
-        className="pointer-events-none absolute inset-0 transition-all duration-1000"
+        className="carousel-ambient-layer pointer-events-none absolute -inset-[18%] z-0 transition-opacity duration-1000 ease-out"
         style={{
-          background: `radial-gradient(60% 55% at 70% 40%, ${active.accent}33 0%, transparent 65%)`,
+          opacity: 0.3,
+          background: `radial-gradient(62% 68% at 50% 46%, ${active.atmosphere.primary} 0%, ${active.atmosphere.primary}99 34%, transparent 72%)`,
+          filter: "blur(28px)",
+          transform: "translateZ(0)",
+          animation: "carousel-ambient-in 900ms cubic-bezier(.22,1,.36,1)",
+        }}
+      />
+      <div
+        key={`highlight-${active.id}`}
+        aria-hidden
+        className="carousel-highlight-layer pointer-events-none absolute inset-0 z-0 transition-opacity duration-1000 ease-out"
+        style={{
+          opacity: 0.38,
+          background: `radial-gradient(42% 48% at 50% 34%, ${active.atmosphere.secondary}66 0%, ${active.atmosphere.secondary}22 45%, transparent 78%), radial-gradient(70% 75% at 50% 85%, ${active.atmosphere.primary}55 0%, transparent 72%)`,
+          animation: "carousel-highlight-in 900ms cubic-bezier(.22,1,.36,1)",
         }}
       />
 
@@ -446,7 +470,7 @@ export default function App({ onShopClick, onProductClick }: { onShopClick?: () 
               </button>
             ))}
           </div>
-          <style>{`@keyframes bestsellers-fill { from { width: 0%; } to { width: 100%; } }`}</style>
+          <style>{`@keyframes bestsellers-fill { from { width: 0%; } to { width: 100%; } } @keyframes carousel-ambient-in { from { opacity: 0; transform: scale(.94) translateZ(0); } to { opacity: .3; transform: scale(1) translateZ(0); } } @keyframes carousel-highlight-in { from { opacity: 0; transform: scale(.97); } to { opacity: .38; transform: scale(1); } } @media (prefers-reduced-motion: reduce) { .carousel-ambient-layer, .carousel-highlight-layer { animation: none !important; } }`}</style>
         </div>
 
         {/* CTA */}
