@@ -74,12 +74,19 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
   return (
     <>
       <header
-        className="sticky top-0 z-50 w-full"
+        className="sticky top-0 z-[100] block w-full"
         style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1,
+          position: 'sticky',
+          top: 0,
           height: scrolled ? '72px' : '82px',
-          backgroundColor: scrolled
-            ? 'rgba(12, 18, 32, 0.96)'
-            : 'rgba(16, 29, 56, 0.98)',
+          backgroundColor: scrolled ? 'rgba(12, 18, 32, 0.96)' : 'rgba(16, 29, 56, 0.98)',
+          backgroundImage: "linear-gradient(rgba(16,24,39,.32), rgba(16,24,39,.48)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/file_00000000ba84820a8faf5570b6d61f9c-ckksajznGCQ8ceuIRMtcsiTqiAtLXm.png')",
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
           backdropFilter: 'blur(24px)',
           borderBottom: '1px solid rgba(230,201,135,0.24)',
           boxShadow: scrolled ? '0 12px 40px rgba(0,0,0,.18)' : 'none',
@@ -108,7 +115,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
                 }}
               />
             </button>
-            <div className="hidden lg:flex items-center gap-10">
+            <div className="hidden xl:flex items-center gap-10">
               {navItems.map(item => (
                 <button
                   key={item.label}
@@ -238,7 +245,7 @@ href="/hesabim" onClick={(event) => { event.preventDefault(); onNavigateAccount?
             </button>
 
             <button
-              className="lg:hidden w-9 h-9 flex items-center justify-center"
+              className="xl:hidden w-9 h-9 flex items-center justify-center"
               style={{ color: iconColor }}
               onClick={() => setMobileOpen(v => !v)}
             >
