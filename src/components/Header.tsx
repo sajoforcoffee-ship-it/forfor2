@@ -50,6 +50,13 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [mobileOpen]);
+
   const navItems = [
     { label: 'Ana Sayfa', cb: onNavigateHome },
     { label: 'Tüm Kahveler', cb: onNavigateShop },
@@ -403,14 +410,17 @@ Sepete git
       {/* Mobile drawer */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[60] lg:hidden"
+          className="mobile-drawer-backdrop fixed inset-0 z-[60] lg:hidden"
           data-mobile-menu-version="premium-v2"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Ana menü"
           style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)' }}
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="absolute right-0 top-0 bottom-0 h-full w-[88vw] max-w-sm overflow-y-auto p-6 sm:p-8"
-            style={{ backgroundColor: 'var(--surface)', borderLeft: '1px solid var(--border)' }}
+            className="mobile-drawer-panel absolute right-0 top-0 bottom-0 h-full w-[82vw] max-w-[420px] overflow-y-auto p-6 sm:p-8"
+            style={{ backgroundColor: '#101827', borderLeft: '1px solid rgba(198,164,106,.25)' }}
             onClick={e => e.stopPropagation()}
           >
             <div className="mobile-drawer-header">
@@ -431,9 +441,9 @@ Sepete git
                   key={item.label}
                   onClick={() => { item.cb?.(); setMobileOpen(false); }}
                   className="mobile-primary-link font-serif transition-colors duration-300"
-                  style={{ color: 'var(--text-primary)' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#d7a85c'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-primary)'}
+                  style={{ color: '#F2EDE3' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#D6B779'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#F2EDE3'}
                 >
                   {item.label}
                 </button>
@@ -449,7 +459,7 @@ Sepete git
                 Mağaza
               </button>
             </nav>
-            <div className="mt-8 border-t border-[var(--border)] pt-5">
+            <div className="mobile-drawer-account mt-8 border-t pt-5">
               {user ? (
                 <>
                   <div className="mb-3 flex items-center gap-3 rounded-xl px-2 py-2">
@@ -464,26 +474,26 @@ Sepete git
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                       <UserRound size={18} strokeWidth={1.5} /> Hesabım
                     </button>
-                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <button type="button" onClick={() => { onNavigateAccount?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                       <Heart size={18} strokeWidth={1.5} /> Favorilerim
                     </button>
-                    <button type="button" onClick={() => { onNavigateCart?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <button type="button" onClick={() => { onNavigateCart?.(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                       <ShoppingBag size={18} strokeWidth={1.5} /> Sepet{cartCount > 0 ? ` (${cartCount})` : ''}
                     </button>
-                    <button type="button" onClick={async () => { await supabase?.auth.signOut(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    <button type="button" onClick={async () => { await supabase?.auth.signOut(); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                       <LogOut size={16} strokeWidth={1.5} /> Çıkış yap
                     </button>
                   </div>
                 </>
               ) : (
                 <div className="space-y-1">
-                  <button type="button" onClick={() => { onNavigateAccount?.('login'); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                  <button type="button" onClick={() => { onNavigateAccount?.('login'); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                     <LogIn size={19} strokeWidth={1.5} /> Giriş yap
                   </button>
-                  <button type="button" onClick={() => { onNavigateAccount?.('signup'); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                  <button type="button" onClick={() => { onNavigateAccount?.('signup'); setMobileOpen(false); }} className="mobile-account-link flex min-h-11 w-full items-center gap-3 rounded-lg px-2 text-left text-sm transition-colors" style={{ color: '#F2EDE3' }}>
                     <UserRoundPlus size={19} strokeWidth={1.5} /> Üye ol
                   </button>
                 </div>
