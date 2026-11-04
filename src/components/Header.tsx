@@ -77,11 +77,10 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
         className="sticky top-0 z-50 w-full"
         style={{
           height: scrolled ? '72px' : '82px',
-          backgroundColor: '#101827',
-          backgroundImage: `linear-gradient(rgba(16,24,39,.28), rgba(16,24,39,.42)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/file_00000000ba84820a8faf5570b6d61f9c-xr4FRH4xVilfeJ1pmCOBW5YDhelYNT.png')`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backdropFilter: 'blur(16px)',
+          backgroundColor: scrolled
+            ? 'rgba(12, 18, 32, 0.96)'
+            : 'rgba(16, 29, 56, 0.98)',
+          backdropFilter: 'blur(24px)',
           borderBottom: '1px solid rgba(230,201,135,0.24)',
           boxShadow: scrolled ? '0 12px 40px rgba(0,0,0,.18)' : 'none',
           transition,
@@ -101,7 +100,7 @@ const Header = ({ onNavigateHome, onNavigateShop, onNavigateCart, onNavigateAcco
                 src="https://www.forcoffeetr.com/wp-content/uploads/2026/10/logoforcoffee.png"
                 alt="FOR COFFEE"
                 style={{
-                  height: scrolled ? '54px' : '64px',
+                  height: scrolled ? '63px' : '75px',
                   transition,
                   filter: scrolled ? 'drop-shadow(0 0 10px rgba(143,169,139,0.18))' : 'none',
                   width: 'auto',
